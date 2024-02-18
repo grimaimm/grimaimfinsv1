@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="GrimaimDash Apps">
+	<meta name="author" content="@_aiiimmmm">
+	
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link rel="shortcut icon" href="/static/img/logo/iconOne.png" />
+	<link href="/static/assets/font-awesome-pro/css/all.min.css" rel="stylesheet" />
+	<link href="/static/assets/admin-kit/css/css-adminkit.css" rel="stylesheet" />
+	<link href="/static/css/style.css" rel="stylesheet" />
+
+	<title>Sign Up</title>
+</head>
+
+<body>
+  <main class="d-flex w-100">
+		<div class="container d-flex flex-column">
+			<div class="row vh-100">
+				<div class="col-sm-10 col-md-8 col-lg-6 col-xl-5 mx-auto d-table h-100">
+					<div class="d-table-cell align-middle">
+
+						<div class="text-center mt-4">
+							<h1 class="h2 fw-bold">Get started</h1>
+							<p class="lead">
+								Start creating the best possible user experience for you customers.
+							</p>
+						</div>
+
+						<div class="card">
+							<div class="card-body">
+								<div class="m-sm-3">
+									<form method="POST" action="{{ url_for('register') }}">
+										{% if message %}
+											<div class="text-center text-danger alert alert-danger mb-3">
+												{{ message }}
+											</div>
+										{% endif %}
+										<div class="mb-3">
+											<label class="form-label">Username</label>
+											<input class="form-control form-control-lg" type="text" placeholder="Enter your username" name="username" />
+										</div>
+                    <div class="mb-3">
+											<label class="form-label">Full Name</label>
+											<input class="form-control form-control-lg" type="text" placeholder="Enter your fullname" name="fullname" />
+										</div>
+										<div class="mb-3">
+											<label class="form-label">Password</label>
+											<input id="showPassword" class="form-control form-control-lg" type="password" placeholder="Enter your password" name="password" />
+										</div>
+										<div class="mb-3">
+											<label class="form-check">
+												<input class="form-check-input" type="checkbox" onclick="toggleShowPassword()">
+												<span class="form-check-label">
+													Tampilkan kata sandi
+												</span>
+											</label>
+										</div>
+										<div class="d-grid mt-4">
+											<button type="submit" class="btn btn-lg aero-btn">Sign Up</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+            <div class="text-center mb-3">
+							Already have account? <a href="/">Log In</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+	<script src="/static/js/show-password.js"></script>
+</body>
+</html>

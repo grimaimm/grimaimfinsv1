@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="GrimaimDash Apps">
+	<meta name="author" content="@_aiiimmmm">
+	
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link rel="shortcut icon" href="/static/img/logo/iconOne.png" />
+	<link href="/static/assets/font-awesome-pro/css/all.min.css" rel="stylesheet" />
+	<link href="/static/assets/admin-kit/css/css-adminkit.css" rel="stylesheet" />
+	<link href="/static/css/style.css" rel="stylesheet" />
+  <link href="/static/module/toast-alert/toastr.css" rel="stylesheet" />
+  <link href="/static/module/sweetalert2/dist/sweetalert2.css" rel="stylesheet" />
+
+	<title>Settings</title>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      {% if category == 'success' %}
+        <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            toastr["success"]("{{ message }}");
+          });
+        </script>
+      {% elif category == 'error' %}
+        <script>
+          document.addEventListener('DOMContentLoaded', function () {
+            toastr["error"]("{{ message }}");
+          });
+        </script>
+      {% endif %}
+    {% endfor %}
+  {% endwith %}
+</head>
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar js-sidebar">
+			<div class="sidebar-content js-simplebar">
+				<a class="sidebar-brand" href="#">
+          <i class="fa-duotone fa-waves-sine me-2"></i> <span class="align-self-center">GrimaimDash</span>
+        </a>
+
+				<div class="sidebar-profile">
+          <img src="{{ url_for('static', filename='images/profiles/' + current_user.userPicture) }}" class="rounded" height="45" width="45" alt="Profile Picture">
+						<div class="profile-name">
+							<span class="fullname">{{ userInfo["fullname"] }}</span>
+							<span class="job">Admin</span>
+							<span></span>
+						</div>
+				</div>
+
+				<ul class="sidebar-nav">
+          <li class="sidebar-header">
+						Dashboard
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/dashboard">
+              <i class="align-middle fa-duotone fa-grid-horizontal sidebar-icon"></i> <span class="align-middle">Dashboard</span>
+            </a>
+					</li>
+					<li class="sidebar-header">
+						Pages
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/pengeluaran">
+              <i class="align-middle fa-duotone fa-chart-line-down sidebar-icon"></i> <span class="align-middle">Pengeluaran</span>
+            </a>
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/pemasukan">
+              <i class="align-middle fa-duotone fa-chart-line-up sidebar-icon"></i> <span class="align-middle">Pemasukan</span>
+            </a>
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/keuangan">
+              <i class="align-middle fa-duotone fa-money-bill-transfer sidebar-icon"></i> <span class="align-middle">Keuangan</span>
+            </a>
+					</li>
+          <li class="sidebar-item">
+						<a class="sidebar-link" href="/kategori">
+              <i class="align-middle fa-duotone fa-cart-shopping-fast sidebar-icon"></i> <span class="align-middle">Kategori</span>
+            </a>
+					</li>
+					<li class="sidebar-header">
+						Setting
+					</li>
+					<li class="sidebar-item active">
+						<a class="sidebar-link" href="/account/{{ userInfo.username }}">
+              <i class="align-middle fa-duotone fa-gears sidebar-icon"></i> <span class="align-middle">My Account</span>
+            </a>
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/logout">
+              <i class="align-middle fa-duotone fa-arrow-right-from-bracket sidebar-icon"></i> <span class="align-middle">Log out</span>
+            </a>
+					</li>
+					
+				</ul>
+			</div>
+		</nav>
+
+		<div class="main">
+			<nav class="navbar navbar-expand">
+				<a class="sidebar-toggle js-sidebar-toggle">
+          <i class="hamburger align-self-center"></i>
+        </a>
+
+				<div class="sidebar-search">
+					<input type="text" placeholder="Search..." id="searchInput">
+					<button type="submit"><i class="fa-duotone fa-magnifying-glass"></i></button>
+					<div class="search-results" id="searchResults"></div>
+				</div>
+
+				<div class="sidebar-mode">
+					<button type="button" data-theme-toggle aria-label="Change to light theme">
+						<i class="fa-duotone fa-clouds-sun" aria-hidden="true"></i>
+					</button>
+				</div>
+
+				<div class="navbar-profile dropdown" onclick="toggleDropdown(this)">
+					<a class="dropbtn">
+            <img src="{{ url_for('static', filename='images/profiles/' + current_user.userPicture) }}" class="rounded" height="45" width="45" alt="Profile Picture">
+						<span class="d-none d-sm-inline-block fullname">{{ userInfo["fullname"] }}</span>
+						<i class="fa-duotone fa-caret-down d-none d-sm-inline-block"></i>
+					</a>
+					<div class="dropdown-content">
+						<a class="text-center dropdown-name d-sm-none fullname">{{ userInfo["fullname"] }}</a>
+						<hr class="dropdown-divider d-sm-none">
+						<a href="/account/{{ userInfo.username }}">
+							<i class="align-middle fa-duotone fa-gears sidebar-icon me-2"></i> <span class="align-middle">My Account</span>
+						</a>
+						<a href="/logout">
+              <i class="align-middle fa-duotone fa-arrow-right-from-bracket sidebar-icon me-2"></i> <span class="align-middle">Log out</span>
+						</a>
+					</div>
+				</div>
+			</nav>
+
+			<main class="content">
+				<div class="container-fluid p-0">
+
+					<div class="row">
+						<div class="col-xl-12">
+							<div class="pages-header">
+								<h1 class="h3 mb-2">Pengaturan</h1>
+								<p><a href="../dashboard/dashboard.html" class="text-decoration-none">Dashboard</a> / <strong>Pengaturan</strong></p>
+							</div>
+						</div>
+					</div>
+
+          <div class="row">
+            <div class="col-xl-2 col-md-3 mb-3">
+              <div class="tabs-container-column">
+                <span class="text-center text-wrap">Pengaturan Akun</span>
+                <a href="{{ url_for('account', username=userInfo.username) }}" class="tab {% if active_tab == 'tab1' %}active{% endif %}" onclick="showTabAccount('tab1')">Akun</a>
+                <a href="{{ url_for('password', username=userInfo.username) }}" class="tab {% if active_tab == 'tab2' %}active{% endif %}" onclick="showTabAccount('tab2')">Kata Sandi</a>
+                <a href="{{ url_for('delete_account', username=userInfo.username) }}" class="tab tab3 {% if active_tab == 'tab3' %}active{% endif %}" onclick="showTabAccount('tab3')">Hapus Akun</a>
+
+              </div>
+            </div>
+            <div class="col-xl-10 col-md-9">
+              <div id="tab1" class="tab-content {% if active_tab == 'tab1' %}active{% endif %}">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="card card-table">
+                      <div class="card-header">
+                        <h5><i class="fa-duotone fa-user-pen me-2"></i>Detail Akun</h5>
+                      </div>
+                      <div class="card-body">
+                        <form method="POST" action="" enctype="multipart/form-data">
+                          <div class="row">
+                            <div class="col-md-4 mb-3">
+                              <div class="col d-flex justify-content-center">
+                                <div class="circle mb-3">
+                                  <img class="profile_pic" src="{{ url_for('static', filename='images/profiles/' + current_user.userPicture) }}" alt="Profile Picture">
+                                </div>
+                              </div>
+                              <div class="p-image d-flex justify-content-center mb-2">
+                                <button type="button" class="upload-button btn aero-btn-submit d-inline-flex enable-on-edit" style="padding: 0.40rem 0.60rem;" disabled><i class="fa-duotone fa-upload mx-1"></i> <span class="mx-1">Pilih Foto</span></button>
+                                <input class="file-upload enable-on-edit" type="file" name="userPicture" disabled>
+                              </div>
+                              <div class="text-center">
+                                <small>Untuk hasil terbaik, gunakan gambar minimal 128x128 piksel dalam format .jpg</small>
+                              </div>
+                            </div>
+                            <div class="col-md-8">
+                              <div class="mb-1" hidden>
+                                <label class="form-label"><strong>ID Pengguna: {{ userInfo.userID }}</strong></label>
+                              </div>
+                              <div class="mb-3">
+                                  <label class="form-label"><strong>Nama Pengguna</strong></label>
+                                  <input type="text" class="form-control bg-transparent enable-on-edit" value="{{ userInfo.username }}" name="username" disabled>
+                              </div>
+                              <div class="mb-3">
+                                  <label class="form-label"><strong>Nama Lengkap</strong></label>
+                                  <input type="text" class="form-control bg-transparent enable-on-edit" value="{{ userInfo.fullname }}" name="fullname" disabled>
+                              </div>
+                              <div class="button-grp">
+                                <a href="/account/{{ userInfo.username }}" class="btn aero-btn-submit btn-cancel-update d-none" style="padding: 0.40rem 0.60rem;">
+                                  <span class="mx-1">Batal</span>
+                                </a>
+                                <button type="submit" class="btn aero-btn-submit btn-save-update d-none" style="padding: 0.40rem 0.60rem;">
+                                  <span class="mx-1">Simpan Perubahan</span>
+                                </button>
+                                <button type="button" class="btn aero-btn-submit btn-update-account" style="padding: 0.40rem 0.60rem;" onclick="toggleButtons()">
+                                  <span class="mx-1">Edit Akun</span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div id="tab2" class="tab-content {% if active_tab == 'tab2' %}active{% endif %}">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="card card-table">
+                      <div class="card-header">
+                        <h5><i class="fa-duotone fa-lock me-2"></i>Kata Sandi</h5>
+                      </div>
+                      <div class="card-body">
+                        <form method="POST" action="">
+                          <div class="mb-3">
+                              <label class="form-label"><strong>Kata sandi saat ini</strong></label>
+                              <input id="currentPassword" type="password" class="form-control bg-transparent" value="{{ userInfo.password }}" required readonly>
+                              <!-- Add a hidden input for the current password -->
+                              <input type="hidden" name="currentPassword" value="{{ userInfo.password }}">
+                          </div>
+                          <div class="mb-3">
+                              <label class="form-label"><strong>Kata sandi baru</strong></label>
+                              <input id="newPassword" type="password" class="form-control bg-transparent" placeholder="Masukan kata sandi baru" name="password" required>
+                          </div>
+                          <div class="mb-3">
+                              <label class="form-label"><strong>Verifikasi kata sandi</strong></label>
+                              <input id="confirmPassword" type="password" class="form-control bg-transparent" placeholder="Masukan ulang kata sandi baru" required>
+                          </div>
+                          <div class="mb-3">
+                              <label class="form-check">
+                                  <input class="form-check-input" type="checkbox" value="" onclick="togglePasswordVisibility()">
+                                  <span class="form-check-label">
+                                      Tampilkan kata sandi
+                                  </span>
+                              </label>
+                          </div>
+                          <div class="button-grp">
+                              <button type="submit" class="btn aero-btn-2" style="padding: 0.40rem 0.60rem;">
+                                  <span class="mx-1">Simpan Kata Sandi</span>
+                              </button>
+                          </div>
+                      </form>                      
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+
+              <div id="tab2" class="tab-content {% if active_tab == 'tab3' %}active{% endif %}">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="card card-table">
+                      <div class="card-header">
+                        <h5><i class="fa-duotone fa-trash-can me-2"></i>Hapus Akun</h5>
+                      </div>
+                      <div class="card-body">
+                        <div class="row">
+                          <div class="col-12">
+                            <span class="text-delete-acc">
+                              Apakah Anda menyadari bahwa dengan menghapus akun Anda, 
+                              Anda akan kehilangan hak akses ke semua fitur dan data terkait 
+                              dengan akun tersebut?
+                            </span>
+                            <br><br>
+                            <span class="text-delete-acc">Pastikan keputusan ini telah dipertimbangkan secara matang sebelum melanjutkan.</span>
+                            <br><br>
+                            <div class="button-grp">
+                              <a href="#" id="deleteButton" class="btn aero-btn-2" style="padding: 0.40rem 0.60rem;">
+                                <span class="mx-1">Hapus Akun</span>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+				</div>
+			</main>
+
+			<footer class="footer">
+				<div class="container-fluid">
+					<div class="row text-muted d-flex">
+						<div class="col-12 text-center">
+							<p class="mb-0">
+								<a class="text-muted text-decoration-none" href="https://www.instagram.com/aiiimmmm._" target="_blank"><strong>2024 &copy; GrimaimDash</strong></a>
+							</p>
+						</div>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</div>
+  
+	<script src="/static/js/dropdown-profile.js"></script>
+  <script src="/static/js/form-edit.js"></script>
+	<script src="/static/js/sun-moon.js"></script>
+  <script src="/static/js/show-password.js"></script>
+  <script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
+  <script src="/static/js/image-result.js"></script>
+	<script src="/static/js/search-result.js"></script>
+	<script src="/static/js/tabs-periode-dash.js"></script>
+	<script src="/static/assets/admin-kit/js/app.js"></script>
+  <script src="/static/js/sidebar-item-active.js"></script>
+  <script src="/static/module/sweetalert2/dist/sweetalert2.all.min.js"></script>
+  <script src="/static/module/toast-alert/toastr.min.js"></script>
+  <script src="/static/js/fullname.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Function to show Toastr notification
+      toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      }
+    });
+  </script>
+  <script>
+    var isDeleteCompleted = false;
+
+    // Attach an event listener to the button
+    document.getElementById('deleteButton').addEventListener('click', function () {
+      if (!isDeleteCompleted) {
+        Swal.fire({
+          title: "Apa kamu yakin?",
+          text: "Tindakan ini tidak dapat dibatalkan!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Ya, hapus!",
+          cancelButtonText: "Batal",
+          width: '28em'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            let timerInterval;
+            Swal.fire({
+              title: "Deleted!",
+              text: "Akun Anda telah dihapus.",
+              icon: "success",
+              width: '28em',
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: () => {
+                Swal.showLoading();
+                const timer = Swal.getPopup().querySelector("b");
+                timerInterval = setInterval(() => {
+                  timer.textContent = `${Swal.getTimerLeft()}`;
+                }, 100);
+              },
+              willClose: () => {
+                clearInterval(timerInterval);
+                // Set isDeleteCompleted to true after the deletion process is completed
+                isDeleteCompleted = true;
+              }
+            });
+
+            var username = "{{ userInfo.username }}";
+            document.getElementById('deleteButton').href = `/account/${username}/delete`;
+            setTimeout(() => {
+              document.getElementById('deleteButton').click();
+            }, 3000);
+          }
+        });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+Jika Pengeluaran Kemarin (Rp. 0) dan Hari ini (Rp. 0) tidak ada maka: "Tidak ada pengeluaran sejak kemarin"
+Jika Pengeluaran Kemarin Tidak Ada (Rp. 0) sedangkan Hari ini ada maka: "Pengeluaran sejak hari ini"
+Jika Pengeluaran Kemarin Ada sedangkan hari ini (Rp. 0) tidak ada : "Tidak ada pengeluaran hari ini"
+Jika Pengeluaran Hari ini lebih besar dari kemarin: "Lebih besar dari kemarin"
+Jika Pengeluaran Hari ini lebih kecil dari kemarin: "Lebih kecil dari kemarin"
+Jika Pengeluaran kemarin dan Hari ini sama maka: "Sama dengan kemarin"
+
+
+Chart Line Harian:
+Pemasukan warna biru
+Pengeluaran warna merah
+label jam 1 sampai 24

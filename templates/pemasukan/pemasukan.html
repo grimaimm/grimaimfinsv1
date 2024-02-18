@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="GrimaimDash Apps">
+	<meta name="author" content="@_aiiimmmm">
+	
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link rel="shortcut icon" href="/static/img/logo/iconOne.png" />
+	<link href="/static/assets/font-awesome-pro/css/all.min.css" rel="stylesheet" />
+	<link href="/static/assets/admin-kit/css/css-adminkit.css" rel="stylesheet" />
+	<link href="/static/css/style.css" rel="stylesheet" />
+  <link href="/static/module/toast-alert/toastr.css" rel="stylesheet" />
+  <link href="/static/module/sweetalert2/dist/sweetalert2.css" rel="stylesheet" />
+
+	<title>Pemasukan</title>
+</head>
+
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar js-sidebar">
+			<div class="sidebar-content js-simplebar">
+				<a class="sidebar-brand" href="#">
+          <i class="fa-duotone fa-waves-sine me-2"></i> <span class="align-self-center">GrimaimDash</span>
+        </a>
+
+				<div class="sidebar-profile">
+          <img src="{{ url_for('static', filename='images/profiles/' + current_user.userPicture) }}" class="rounded" height="45" width="45" alt="Profile Picture">
+						<div class="profile-name">
+							<span class="fullname">{{ userInfo.fullname }}</span>
+							<span class="job">Admin</span>
+							<span></span>
+						</div>
+				</div>
+
+				<ul class="sidebar-nav">
+          <li class="sidebar-header">
+						Dashboard
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/dashboard">
+              <i class="align-middle fa-duotone fa-grid-horizontal sidebar-icon"></i> <span class="align-middle">Dashboard</span>
+            </a>
+					</li>
+					<li class="sidebar-header">
+						Pages
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/pengeluaran">
+              <i class="align-middle fa-duotone fa-chart-line-down sidebar-icon"></i> <span class="align-middle">Pengeluaran</span>
+            </a>
+					</li>
+					<li class="sidebar-item active">
+						<a class="sidebar-link" href="/pemasukan">
+              <i class="align-middle fa-duotone fa-chart-line-up sidebar-icon"></i> <span class="align-middle">Pemasukan</span>
+            </a>
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/keuangan">
+              <i class="align-middle fa-duotone fa-money-bill-transfer sidebar-icon"></i> <span class="align-middle">Keuangan</span>
+            </a>
+					</li>
+          <li class="sidebar-item">
+						<a class="sidebar-link" href="/kategori">
+              <i class="align-middle fa-duotone fa-cart-shopping-fast sidebar-icon"></i> <span class="align-middle">Kategori</span>
+            </a>
+					</li>
+					<li class="sidebar-header">
+						Setting
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/account/{{ userInfo.username }}">
+              <i class="align-middle fa-duotone fa-gears sidebar-icon"></i> <span class="align-middle">My Account</span>
+            </a>
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/logout">
+              <i class="align-middle fa-duotone fa-arrow-right-from-bracket sidebar-icon"></i> <span class="align-middle">Log out</span>
+            </a>
+					</li>
+					
+				</ul>
+			</div>
+		</nav>
+
+		<div class="main">
+			<nav class="navbar navbar-expand">
+				<a class="sidebar-toggle js-sidebar-toggle">
+          <i class="hamburger align-self-center"></i>
+        </a>
+
+				<div class="sidebar-search">
+					<input type="text" placeholder="Search..." id="searchInput">
+					<button type="submit"><i class="fa-duotone fa-magnifying-glass"></i></button>
+					<div class="search-results" id="searchResults"></div>
+				</div>
+
+				<div class="sidebar-mode">
+					<button type="button" data-theme-toggle aria-label="Change to light theme">
+						<i class="fa-duotone fa-clouds-sun" aria-hidden="true"></i>
+					</button>
+				</div>
+
+				<div class="navbar-profile dropdown" onclick="toggleDropdown(this)">
+					<a class="dropbtn">
+						<img src="{{ url_for('static', filename='images/profiles/' + current_user.userPicture) }}" class="rounded" height="45" width="45" alt="Profile Picture">
+						<span class="d-none d-sm-inline-block fullname">{{ userInfo["fullname"] }}</span>
+						<i class="fa-duotone fa-caret-down d-none d-sm-inline-block"></i>
+					</a>
+					<div class="dropdown-content">
+						<a class="text-center dropdown-name d-sm-none fullname">{{ userInfo["fullname"] }}</a>
+						<hr class="dropdown-divider d-sm-none">
+						<a href="/account/{{ userInfo.username }}">
+							<i class="align-middle fa-duotone fa-gears sidebar-icon me-2"></i> <span class="align-middle text-nowrap">My Account</span>
+						</a>
+						<a href="/logout">
+              <i class="align-middle fa-duotone fa-arrow-right-from-bracket sidebar-icon me-2"></i> <span class="align-middle">Log out</span>
+						</a>
+					</div>
+				</div>
+			</nav>
+
+			<main class="content">
+				<div class="container-fluid p-0">
+
+					<div class="row d-flex justify-content-center row-one mb-3">
+						<div class="col-xl-6 col-md-6 left">
+							<div class="pages-header">
+								<h1 class="h3 mb-2">Pemasukan</h1>
+								<p><a href="/dashboard" class="text-decoration-none">Dashboard</a> / <strong>Pemasukan</strong></p>
+							</div>
+						</div>
+						<div class="col-xl-6 col-md-6 right">
+							<div class="tabs-container">
+                <a href="/pemasukan" class="tab {% if active_tab == 'tab1' %}active{% endif %}" onclick="showTabAccount('tab1')">Semua</a>
+                <a href="/pemasukan/harian" class="tab {% if active_tab == 'tab2' %}active{% endif %}" onclick="showTabAccount('tab2')">Harian</a>
+                <a href="/pemasukan/mingguan" class="tab {% if active_tab == 'tab3' %}active{% endif %}" onclick="showTabAccount('tab3')">Mingguan</a>
+                <a href="/pemasukan/bulanan" class="tab {% if active_tab == 'tab4' %}active{% endif %}" onclick="showTabAccount('tab4')">Bulanan</a>
+							</div>
+						</div>
+					</div>
+
+					<div id="tab1" class="tab-content {% if active_tab == 'tab1' %}active{% endif %}">
+						<div class="row">
+              <div class="col-12">
+                <div class="card card-table">
+                  <div class="card-header">
+                    <h5><i class="fa-duotone fa-table me-2"></i>Tabel Pemasukan</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="row-one">
+                      <input type="search" id="myInput" onkeyup="myFunction()" class="form-control-sm" placeholder="Search..." style="padding: 0.40rem 0.60rem;">
+                      <a href="/pemasukan/tambah-data" type="button" class="btn btn-sm aero-btn-2" style="padding: 0.40rem 0.60rem;">
+                        <i class="fa-solid fa-plus mx-1"></i><span class="mx-1 span-add">Tambah Data</span>
+                      </a>
+                    </div>
+                    <div class="row">
+                      <div class="table-responsive pb-1">
+                        <table class="table table-hover table-bordered text-nowrap" id="myTable">
+													<div class="mb-3" id="noRecordsMessage" style="display: none;">Tidak ditemukan catatan yang cocok!</div>
+                          <thead>
+                            <tr>
+                              <th>No</th>
+                              <th id="buttonSorted">Tanggal Pemasukan&nbsp;&nbsp;<i class="fa-duotone fa-sort-down"></i></th>
+                              <th>Deskripsi</th>
+                              <th>Jumlah Pemasukan</th>
+                              <th>Admin</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for pemasukan in semuaPemasukan_paginated %}
+                            <tr>
+                              <td>{{ start_index + loop.index0 }}</td>
+                              <td>{{ pemasukan.tanggalPemasukan.strftime('%A, %d %B %Y') }}</td>
+                              <td>{{ pemasukan.deskripsiPemasukan }}</td>
+                              <td>Rp. {{ '{:,.0f}'.format(pemasukan.jumlahPemasukan).replace(',', '.') }}</td>
+                              <td>{{ pemasukan.admin.adminName }}</td>
+                              <td>
+                                <div class="button-action">
+                                  <a href="/pemasukan/ID={{ pemasukan.pemasukanID }}/edit-data" type="button" class="update btn aero-btn-1" title="Update">
+                                    <i class="fa-solid fa-pen"></i>
+                                  </a>
+                                  <a href="#" type="button" class="delete btn aero-btn-1" id="deleteButton" title="delete" onclick="confirmDelete('{{ pemasukan.pemasukanID }}')">
+                                    <i class="fa-solid fa-trash-xmark"></i>
+                                  </a>
+                                </div>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    {% if semuaPemasukan_paginated and semuaPemasukan_paginated.pages > 1 %}
+                      <div class="row-two">
+                        <nav class="pagination rounded-end-5 rounded-start-5">
+                          {% if semuaPemasukan_paginated.has_prev %}
+                            <a href="{{ url_for('pemasukan', page=semuaPemasukan_paginated.prev_num, tab='tab1', sort=sort_order) }}" class="pag-btn btn-sm rounded-end-0 rounded-start-5 ps-3">Previous</a>
+                          {% else %}
+                            <button class="pag-btn btn-sm rounded-end-0 rounded-start-5 ps-3 disabled">Previous</button>
+                          {% endif %}
+
+                          {% set max_pages = 3 %} {# Adjust the number of visible pages here #}
+                          {% set half_max_pages = (max_pages - 1) // 2 %}
+                          {% set start_page = 1 if semuaPemasukan_paginated.page - half_max_pages < 1 else semuaPemasukan_paginated.page - half_max_pages %}
+
+                          {% set end_page = semuaPemasukan_paginated.pages if start_page + max_pages - 1 > semuaPemasukan_paginated.pages else start_page + max_pages - 1 %}
+
+                          {% for num in range(start_page, end_page + 1) %}
+                            {% if num == start_page and num > 1 %}
+                              <a href="{{ url_for('pemasukan', page=1, tab='tab1', sort=sort_order) }}" class="pag-btn btn-sm rounded-0">1</a>
+                                {% if start_page > 2 %}
+                                  <span class="pag-btn btn-sm disabled">...</span>
+                                {% endif %}
+                            {% endif %}
+                            {% if semuaPemasukan_paginated.page == num %}
+                              <span class="pag-btn btn-sm rounded-0 active">{{ num }}</span>
+                            {% else %}
+                              <a href="{{ url_for('pemasukan', page=num, tab='tab1', sort=sort_order) }}" class="pag-btn btn-sm rounded-0">{{ num }}</a>
+                            {% endif %}
+                            {% if num == end_page and num < semuaPemasukan_paginated.pages - 1 %}
+                              <span class="pag-btn btn-sm disabled">...</span>
+                                {% if end_page < semuaPemasukan_paginated.pages - 1 %}
+                                  <a href="{{ url_for('pemasukan', page=semuaPemasukan_paginated.pages, tab='tab1', sort=sort_order) }}" class="pag-btn btn-sm rounded-0">{{ semuaPemasukan_paginated.pages }}</a>
+                                {% endif %}
+                            {% endif %}
+                          {% endfor %}
+
+                          {% if semuaPemasukan_paginated.has_next %}
+                            <a href="{{ url_for('pemasukan', page=semuaPemasukan_paginated.next_num, tab='tab1', sort=sort_order) }}" class="pag-btn btn-sm rounded-start-0 rounded-end-5 pe-3">Next</a>
+                          {% else %}
+                            <button class="pag-btn btn-sm rounded-start-0 rounded-end-5 pe-3 disabled">Next</button>
+                          {% endif %}
+                        </nav>
+                      </div>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+					</div>
+
+
+					<div id="tab2" class="tab-content {% if active_tab == 'tab2' %}active{% endif %}">
+						<div class="row">
+              <div class="col-12">
+                <div class="card card-table">
+                  <div class="card-header">
+                    <h5><i class="fa-duotone fa-table me-2"></i>Tabel Pemasukan Hari Ini</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="row-one">
+                      <input type="search" id="myInput" onkeyup="myFunction()" class="form-control-sm" placeholder="Search..." style="padding: 0.40rem 0.60rem;">
+                      <a href="/pemasukan/tambah-data" type="button" class="btn btn-sm aero-btn-2" style="padding: 0.40rem 0.60rem;">
+                        <i class="fa-solid fa-plus mx-1"></i><span class="mx-1 span-add">Tambah Data</span>
+                      </a>
+                    </div>
+                    <div class="row">
+                      <div class="table-responsive pb-1">
+                        <table class="table table-hover table-bordered text-nowrap" id="myTable">
+													<div class="mb-3" id="noRecordsMessage" style="display: none;">Tidak ditemukan catatan yang cocok!</div>
+                          <thead>
+                            <tr>
+                              <th>No</th>
+                              <th>Tanggal Pemasukan</th>
+                              <th>Deskripsi</th>
+                              <th>Jumlah Pemasukan</th>
+                              <th>Admin</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for index, pemasukan in enumerate(semuaPemasukan_Harian_sorted, start=1) %}
+                            <tr>
+                              <td>{{ index }}</td>
+                              <td>{{ pemasukan.tanggalPemasukan.strftime('%A, %d %B %Y') }}</td>
+                              <td>{{ pemasukan.deskripsiPemasukan }}</td>
+                              <td>Rp. {{ '{:,.0f}'.format(pemasukan.jumlahPemasukan).replace(',', '.') }}</td>
+                              <td>{{ pemasukan.admin.adminName }}</td>
+                              <td>
+                                <div class="button-action">
+                                  <a href="/pemasukan/ID={{ pemasukan.pemasukanID }}/edit-data" type="button" class="update btn aero-btn-1" title="Update">
+                                    <i class="fa-solid fa-pen"></i>
+                                  </a>
+                                  <a href="#" type="button" class="delete btn aero-btn-1" id="deleteButton" title="delete" onclick="confirmDelete('{{ pemasukan.pemasukanID }}')">
+                                    <i class="fa-solid fa-trash-xmark"></i>
+                                  </a>
+                                </div>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+					</div>
+
+					<div id="tab3" class="tab-content {% if active_tab == 'tab3' %}active{% endif %}">
+						<div class="row">
+              <div class="col-12">
+                <div class="card card-table">
+                  <div class="card-header">
+                    <h5><i class="fa-duotone fa-table me-2"></i>Tabel Pemasukan Minggu Ini</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="row-one">
+                      <input type="search" id="myInput" onkeyup="myFunction()" class="form-control-sm" placeholder="Search..." style="padding: 0.40rem 0.60rem;">
+                      <a href="/pemasukan/tambah-data" type="button" class="btn btn-sm aero-btn-2" style="padding: 0.40rem 0.60rem;">
+                        <i class="fa-solid fa-plus mx-1"></i><span class="mx-1 span-add">Tambah Data</span>
+                      </a>
+                    </div>
+                    <div class="row">
+                      <div class="table-responsive pb-1">
+                        <table class="table table-hover table-bordered text-nowrap" id="myTable">
+													<div class="mb-3" id="noRecordsMessage" style="display: none;">Tidak ditemukan catatan yang cocok!</div>
+                          <thead>
+                            <tr>
+                              <th>No</th>
+                              <th>Tanggal Pemasukan</th>
+                              <th>Deskripsi</th>
+                              <th>Jumlah Pemasukan</th>
+                              <th>Admin</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for index, pemasukan in enumerate(semuaPemasukan_Mingguan_sorted, start=1) %}
+                            <tr>
+                              <td>{{ index }}</td>
+                              <td>{{ pemasukan.tanggalPemasukan.strftime('%A, %d %B %Y') }}</td>
+                              <td>{{ pemasukan.deskripsiPemasukan }}</td>
+                              <td>Rp. {{ '{:,.0f}'.format(pemasukan.jumlahPemasukan).replace(',', '.') }}</td>
+                              <td>{{ pemasukan.admin.adminName }}</td>
+                              <td>
+                                <div class="button-action">
+                                  <a href="/pemasukan/ID={{ pemasukan.pemasukanID }}/edit-data" type="button" class="update btn aero-btn-1" title="Update">
+                                    <i class="fa-solid fa-pen"></i>
+                                  </a>
+                                  <a href="#" type="button" class="delete btn aero-btn-1" id="deleteButton" title="delete" onclick="confirmDelete('{{ pemasukan.pemasukanID }}')">
+                                    <i class="fa-solid fa-trash-xmark"></i>
+                                  </a>
+                                </div>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+					</div>
+
+					<div id="tab4" class="tab-content {% if active_tab == 'tab4' %}active{% endif %}">
+						<div class="row">
+              <div class="col-12">
+                <div class="card card-table">
+                  <div class="card-header">
+                    <h5><i class="fa-duotone fa-table me-2"></i>Tabel Pemasukan Bulan Ini</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="row-one">
+                      <input type="search" id="myInput" onkeyup="myFunction()" class="form-control-sm" placeholder="Search..." style="padding: 0.40rem 0.60rem;">
+                      <a href="/pemasukan/tambah-data" type="button" class="btn btn-sm aero-btn-2" style="padding: 0.40rem 0.60rem;">
+                        <i class="fa-solid fa-plus mx-1"></i><span class="mx-1 span-add">Tambah Data</span>
+                      </a>
+                    </div>
+                    <div class="row">
+                      <div class="table-responsive pb-1">
+                        <table class="table table-hover table-bordered text-nowrap" id="myTable">
+													<div class="mb-3" id="noRecordsMessage" style="display: none;">Tidak ditemukan catatan yang cocok!</div>
+                          <thead>
+                            <tr>
+                              <th>No</th>
+                              <th>Tanggal Pemasukan</th>
+                              <th>Deskripsi</th>
+                              <th>Jumlah Pemasukan</th>
+                              <th>Admin</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for index, pemasukan in enumerate(semuaPemasukan_Bulanan_sorted, start=1) %}
+                            <tr>
+                              <td>{{ index }}</td>
+                              <td>{{ pemasukan.tanggalPemasukan.strftime('%A, %d %B %Y') }}</td>
+                              <td>{{ pemasukan.deskripsiPemasukan }}</td>
+                              <td>Rp. {{ '{:,.0f}'.format(pemasukan.jumlahPemasukan).replace(',', '.') }}</td>
+                              <td>{{ pemasukan.admin.adminName }}</td>
+                              <td>
+                                <div class="button-action">
+                                  <a href="/pemasukan/ID={{ pemasukan.pemasukanID }}/edit-data" type="button" class="update btn aero-btn-1" title="Update">
+                                    <i class="fa-solid fa-pen"></i>
+                                  </a>
+                                  <a href="#" type="button" class="delete btn aero-btn-1" id="deleteButton" title="delete" onclick="confirmDelete('{{ pemasukan.pemasukanID }}')">
+                                    <i class="fa-solid fa-trash-xmark"></i>
+                                  </a>
+                                </div>
+                              </td>
+                            </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+					</div>
+				</div>
+			</main>
+
+			<footer class="footer">
+				<div class="container-fluid">
+					<div class="row text-muted d-flex">
+						<div class="col-12 text-center">
+							<p class="mb-0">
+								<a class="text-muted text-decoration-none" href="https://www.instagram.com/aiiimmmm._" target="_blank"><strong>2024 &copy; GrimaimDash</strong></a>
+							</p>
+						</div>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var buttonSorted = document.getElementById("buttonSorted");
+      // Mendapatkan urutan awal dari URL saat halaman dimuat
+      var currentOrder = window.location.href.includes("sort=asc") ? "asc" : "desc";
+      // Mendapatkan ikon saat ini
+      var icon = buttonSorted.querySelector("i");
+      // Menyesuaikan ikon berdasarkan urutan awal
+      if (currentOrder === "asc") {
+          icon.classList.remove("fa-sort-down");
+          icon.classList.add("fa-sort-up");
+      } else {
+          icon.classList.remove("fa-sort-up");
+          icon.classList.add("fa-sort-down");
+      }
+      buttonSorted.addEventListener("click", function (event) {
+        event.preventDefault(); 
+          // Mendapatkan ikon saat ini
+          var icon = buttonSorted.querySelector("i");
+
+          // Mengubah ikon dan arahkan ke URL yang sesuai
+          if (currentOrder === "asc") {
+              // Jika saat ini adalah ascending, ubah menjadi descending
+              icon.classList.remove("fa-sort-up");
+              icon.classList.add("fa-sort-down");
+              window.location.href = "{{ url_for('pemasukan', sort='desc') }}";
+              currentOrder = "desc";
+          } else {
+              // Jika saat ini adalah descending atau default, ubah menjadi ascending
+              icon.classList.remove("fa-sort-down");
+              icon.classList.add("fa-sort-up");
+              window.location.href = "{{ url_for('pemasukan', sort='asc') }}";
+              currentOrder = "asc";
+          }
+      });
+    });
+  </script>
+  <script src="/static/js/dropdown-profile.js"></script>
+  <script src="/static/js/sun-moon.js"></script>
+	<script src="/static/js/search-result.js"></script>
+	<script src="/static/js/tabs-periode-dash.js"></script>
+	<script src="/static/assets/admin-kit/js/app.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/static/js/sidebar-item-active.js"></script>
+  <script src="/static/module/sweetalert2/dist/sweetalert2.all.min.js"></script>
+  <script src="/static/module/toast-alert/toastr.min.js"></script>
+  <script src="/static/js/fullname.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Function to show Toastr notification
+      toastr.options = {
+        "closeButton": false,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-top-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+      }
+    });
+  </script>
+  <script>
+    function confirmDelete(pemasukanID) {
+      Swal.fire({
+        title: 'Apakah Anda yakin ingin menghapus data ini?',
+        text: "Anda tidak akan dapat mengembalikan data yang telah dihapus!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Hapus!',
+        cancelButtonText: 'Batal',
+        width: '50em',
+      }).then((result) => {
+          if (result.isConfirmed) {
+            // Jika user mengkonfirmasi, Anda dapat mengarahkan pengguna ke URL delete atau melakukan aksi penghapusan lainnya.
+            window.location.href = "/pemasukan/delete-data/ID=" + pemasukanID;
+          }
+      });
+    }
+  </script>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          toastr["{{ category }}"]("{{ message }}");
+        });
+      </script>
+    {% endfor %}
+  {% endwith %}
+</body>
+</html>

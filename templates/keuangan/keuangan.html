@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="GrimaimDash Apps">
+	<meta name="author" content="@_aiiimmmm">
+	
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link rel="shortcut icon" href="/static/img/logo/iconOne.png" />
+	<link href="/static/assets/font-awesome-pro/css/all.min.css" rel="stylesheet" />
+	<link href="/static/assets/admin-kit/css/css-adminkit.css" rel="stylesheet" />
+	<link href="/static/css/style.css" rel="stylesheet" />
+
+	<title>Transaksi Keuangan</title>
+</head>
+
+<body>
+	<div class="wrapper">
+		<nav id="sidebar" class="sidebar js-sidebar">
+			<div class="sidebar-content js-simplebar">
+				<a class="sidebar-brand" href="#">
+          <i class="fa-duotone fa-waves-sine me-2"></i> <span class="align-self-center">GrimaimDash</span>
+        </a>
+
+				<div class="sidebar-profile">
+          <img src="{{ url_for('static', filename='images/profiles/' + current_user.userPicture) }}" class="rounded" height="45" width="45" alt="Profile Picture">
+						<div class="profile-name">
+							<span class="fullname">{{ userInfo.fullname }}</span>
+							<span class="job">Admin</span>
+							<span></span>
+						</div>
+				</div>
+
+				<ul class="sidebar-nav">
+          <li class="sidebar-header">
+						Dashboard
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/dashboard">
+              <i class="align-middle fa-duotone fa-grid-horizontal sidebar-icon"></i> <span class="align-middle">Dashboard</span>
+            </a>
+					</li>
+					<li class="sidebar-header">
+						Pages
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/pengeluaran">
+              <i class="align-middle fa-duotone fa-chart-line-down sidebar-icon"></i> <span class="align-middle">Pengeluaran</span>
+            </a>
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/pemasukan">
+              <i class="align-middle fa-duotone fa-chart-line-up sidebar-icon"></i> <span class="align-middle">Pemasukan</span>
+            </a>
+					</li>
+					<li class="sidebar-item active">
+						<a class="sidebar-link" href="/keuangan">
+              <i class="align-middle fa-duotone fa-money-bill-transfer sidebar-icon"></i> <span class="align-middle">Keuangan</span>
+            </a>
+					</li>
+          <li class="sidebar-item">
+						<a class="sidebar-link" href="/kategori">
+              <i class="align-middle fa-duotone fa-cart-shopping-fast sidebar-icon"></i> <span class="align-middle">Kategori</span>
+            </a>
+					</li>
+					<li class="sidebar-header">
+						Setting
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/account/{{ userInfo.username }}">
+              <i class="align-middle fa-duotone fa-gears sidebar-icon"></i> <span class="align-middle">My Account</span>
+            </a>
+					</li>
+					<li class="sidebar-item">
+						<a class="sidebar-link" href="/logout">
+              <i class="align-middle fa-duotone fa-arrow-right-from-bracket sidebar-icon"></i> <span class="align-middle">Log out</span>
+            </a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+
+		<div class="main">
+			<nav class="navbar navbar-expand">
+				<a class="sidebar-toggle js-sidebar-toggle">
+          <i class="hamburger align-self-center"></i>
+        </a>
+
+				<div class="sidebar-search">
+					<input type="text" placeholder="Search..." id="searchInput">
+					<button type="submit"><i class="fa-duotone fa-magnifying-glass"></i></button>
+					<div class="search-results" id="searchResults"></div>
+				</div>
+
+				<div class="sidebar-mode">
+					<button type="button" data-theme-toggle aria-label="Change to light theme">
+						<i class="fa-duotone fa-clouds-sun" aria-hidden="true"></i>
+					</button>
+				</div>
+
+
+				<div class="navbar-profile dropdown" onclick="toggleDropdown(this)">
+					<a class="dropbtn">
+						<img src="{{ url_for('static', filename='images/profiles/' + current_user.userPicture) }}" class="rounded" height="45" width="45" alt="Profile Picture">
+						<span class="d-none d-sm-inline-block fullname">{{ userInfo["fullname"] }}</span>
+						<i class="fa-duotone fa-caret-down d-none d-sm-inline-block"></i>
+					</a>
+					<div class="dropdown-content">
+						<a class="text-center dropdown-name d-sm-none fullname">{{ userInfo["fullname"] }}</a>
+						<hr class="dropdown-divider d-sm-none">
+						<a href="/account/{{ userInfo.username }}">
+							<i class="align-middle fa-duotone fa-gears sidebar-icon me-2"></i> <span class="align-middle text-nowrap">My Account</span>
+						</a>
+						<a href="/logout">
+              <i class="align-middle fa-duotone fa-arrow-right-from-bracket sidebar-icon me-2"></i> <span class="align-middle">Log out</span>
+						</a>
+					</div>
+				</div>
+			</nav>
+
+			<main class="content">
+				<div class="container-fluid p-0">
+
+					<div class="row d-flex justify-content-center row-one mb-3">
+						<div class="col-xl-6 col-md-6 left">
+							<div class="pages-header">
+								<h1 class="h3 mb-2">Transaksi Keuangan</h1>
+								<p><a href="/dashboard" class="text-decoration-none">Dashboard</a> / <strong>Keuangan</strong></p>
+							</div>
+						</div>
+						<div class="col-xl-6 col-md-6 right">
+							<div class="tabs-container">
+                <a href="/keuangan" class="tab {% if active_tab == 'tab1' %}active{% endif %}" onclick="showTabAccount('tab1')">Semua</a>
+                <a href="/keuangan/harian" class="tab {% if active_tab == 'tab2' %}active{% endif %}" onclick="showTabAccount('tab2')">Harian</a>
+                <a href="/keuangan/mingguan" class="tab {% if active_tab == 'tab3' %}active{% endif %}" onclick="showTabAccount('tab3')">Mingguan</a>
+                <a href="/keuangan/bulanan" class="tab {% if active_tab == 'tab4' %}active{% endif %}" onclick="showTabAccount('tab4')">Bulanan</a>
+							</div>
+						</div>
+					</div>
+
+					<div id="tab1" class="tab-content {% if active_tab == 'tab1' %}active{% endif %}">
+						<div class="row">
+              <div class="col-12">
+                <div class="card card-table">
+                  <div class="card-header">
+                    <h5><i class="fa-duotone fa-table me-2"></i>Tabel Transaksi Keuangan</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="row-one">
+                      <input type="search" id="myInput" onkeyup="myFunction()" class="form-control-sm" placeholder="Search..." style="padding: 0.50rem 0.70rem;">
+                    </div>
+                    <div class="row">
+                      <div class="table-responsive pb-1">
+                        <table class="table table-hover table-bordered text-nowrap" id="myTable">
+													<div class="mb-3" id="noRecordsMessage" style="display: none;">Tidak ditemukan catatan yang cocok!</div>
+                          <thead>
+                            <tr>
+                              <th>No</th>
+                              <th id="buttonSorted">Tanggal Transaksi&nbsp;&nbsp;<i class="fa-duotone fa-sort-down"></i></th>
+                              <th>Total Pemasukan</th>
+                              <th>Total Pengeluaran</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for date in sorted_dates %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ date.strftime('%A, %d %B %Y') }}</td>
+                                    <td>Rp. {{ '{:,.0f}'.format(get_total_pemasukan_by_date(date)).replace(',', '.') }}</td>
+                                    <td>Rp. {{ '{:,.0f}'.format(get_total_pengeluaran_by_date(date)).replace(',', '.') }}</td>
+                                </tr>
+                            {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+					</div>
+
+
+					<div id="tab2" class="tab-content {% if active_tab == 'tab2' %}active{% endif %}">
+						<div class="row">
+              <div class="col-12">
+                <div class="card card-table">
+                  <div class="card-header">
+                    <h5><i class="fa-duotone fa-table me-2"></i>Tabel Transaksi Keuangan Hari Ini</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="table-responsive pb-1">
+                        <table class="table table-hover table-bordered text-nowrap" id="myTable">
+                          <thead>
+                            <tr>
+                              <th>No</th>
+                              <th>Tanggal Transaksi</th>
+                              <th>Total Pemasukan</th>
+                              <th>Total Pengeluaran</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for date in sorted_dates %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ date.strftime('%A, %d %B %Y') }}</td>
+                                    <td>Rp. {{ '{:,.0f}'.format(get_total_pemasukan_by_date(date)).replace(',', '.') }}</td>
+                                    <td>Rp. {{ '{:,.0f}'.format(get_total_pengeluaran_by_date(date)).replace(',', '.') }}</td>
+                                </tr>
+                            {% endfor %}
+                            {% if not semuaPemasukan_Harian and not semuaPengeluaran_Harian %}
+                                <tr>
+                                  <td colspan="6" class="dt-empty text-center">Tidak ada transaksi untuk hari ini.</td>
+                                </tr>
+                            {% endif %}                            
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+					</div>
+
+					<div id="tab3" class="tab-content {% if active_tab == 'tab3' %}active{% endif %}">
+						<div class="row">
+              <div class="col-12">
+                <div class="card card-table">
+                  <div class="card-header">
+                    <h5><i class="fa-duotone fa-table me-2"></i>Tabel Transaksi Keuangan Minggu Ini</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="table-responsive pb-1">
+                        <table class="table table-hover table-bordered text-nowrap" id="myTable">
+                          <thead>
+                            <tr>
+                              <th>No</th>
+                              <th>Tanggal Transaksi</th>
+                              <th>Total Pemasukan</th>
+                              <th>Total Pengeluaran</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for date in sorted_dates %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ date.strftime('%A, %d %B %Y') }}</td>
+                                    <td>Rp. {{ '{:,.0f}'.format(get_total_pemasukan_by_date(date)).replace(',', '.') }}</td>
+                                    <td>Rp. {{ '{:,.0f}'.format(get_total_pengeluaran_by_date(date)).replace(',', '.') }}</td>
+                                </tr>
+                            {% endfor %}
+                            {% if not semuaPemasukan_Mingguan and not semuaPengeluaran_Mingguan %}
+                                <tr>
+                                  <td colspan="6" class="dt-empty text-center">Tidak ada transaksi untuk minggu ini.</td>
+                                </tr>
+                            {% endif %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+					</div>
+
+					<div id="tab4" class="tab-content {% if active_tab == 'tab4' %}active{% endif %}">
+						<div class="row">
+              <div class="col-12">
+                <div class="card card-table">
+                  <div class="card-header">
+                    <h5><i class="fa-duotone fa-table me-2"></i>Tabel Transaksi Keuangan Bulan Ini</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="table-responsive pb-1">
+                        <table class="table table-hover table-bordered text-nowrap" id="myTable">
+                          <thead>
+                            <tr>
+                              <th>No</th>
+                              <th>Tanggal Transaksi</th>
+                              <th>Total Pemasukan</th>
+                              <th>Total Pengeluaran</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {% for date in sorted_dates %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ date.strftime('%A, %d %B %Y') }}</td>
+                                    <td>Rp. {{ '{:,.0f}'.format(get_total_pemasukan_by_date(date)).replace(',', '.') }}</td>
+                                    <td>Rp. {{ '{:,.0f}'.format(get_total_pengeluaran_by_date(date)).replace(',', '.') }}</td>
+                                </tr>
+                            {% endfor %}
+                            {% if not semuaPemasukan_Bulanan and not semuaPengeluaran_Bulanan %}
+                                <tr>
+                                  <td colspan="6" class="dt-empty text-center">Tidak ada transaksi untuk bulan ini.</td>
+                                </tr>
+                            {% endif %}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+					</div>
+				</div>
+			</main>
+
+			<footer class="footer">
+				<div class="container-fluid">
+					<div class="row text-muted d-flex">
+						<div class="col-12 text-center">
+							<p class="mb-0">
+								<a class="text-muted text-decoration-none" href="https://www.instagram.com/aiiimmmm._" target="_blank"><strong>2024 &copy; GrimaimDash</strong></a>
+							</p>
+						</div>
+					</div>
+				</div>
+			</footer>
+		</div>
+	</div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var buttonSorted = document.getElementById("buttonSorted");
+      // Mendapatkan urutan awal dari URL saat halaman dimuat
+      var currentOrder = window.location.href.includes("sort=asc") ? "asc" : "desc";
+      // Mendapatkan ikon saat ini
+      var icon = buttonSorted.querySelector("i");
+      // Menyesuaikan ikon berdasarkan urutan awal
+      if (currentOrder === "asc") {
+        icon.classList.remove("fa-sort-down");
+        icon.classList.add("fa-sort-up");
+      } else {
+        icon.classList.remove("fa-sort-up");
+        icon.classList.add("fa-sort-down");
+      }
+      buttonSorted.addEventListener("click", function (event) {
+        event.preventDefault();
+        // Mendapatkan ikon saat ini
+        var icon = buttonSorted.querySelector("i");
+  
+        // Mengubah ikon dan arahkan ke URL yang sesuai
+        var tabParam = window.location.href.includes("tab=") ? "&tab=" + window.location.href.split("tab=")[1].split("&")[0] : "";
+        if (currentOrder === "asc") {
+          // Jika saat ini adalah ascending, ubah menjadi descending
+          icon.classList.remove("fa-sort-up");
+          icon.classList.add("fa-sort-down");
+          window.location.href = "{{ url_for('keuangan', sort='desc') }}" + tabParam;
+          currentOrder = "desc";
+        } else {
+          // Jika saat ini adalah descending atau default, ubah menjadi ascending
+          icon.classList.remove("fa-sort-down");
+          icon.classList.add("fa-sort-up");
+          window.location.href = "{{ url_for('keuangan', sort='asc') }}" + tabParam;
+          currentOrder = "asc";
+        }
+      });
+    });
+  </script>
+  <script src="/static/js/dropdown-profile.js"></script>
+	<script src="/static/js/sun-moon.js"></script>
+	<script src="/static/js/search-result.js"></script>
+	<script src="/static/js/tabs-periode-dash.js"></script>
+	<script src="/static/assets/admin-kit/js/app.js"></script>
+  <script src="/static/js/sidebar-item-active.js"></script>
+	<script src="/static/js/fullname.js"></script>
+</body>
+</html>
